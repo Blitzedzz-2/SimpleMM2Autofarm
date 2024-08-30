@@ -1,6 +1,7 @@
 local AutoFarmModule = {
     options = {
         Fling = true,
+        UnlockFPS = true,
         TweenTime = 4.5,
     }
 }
@@ -13,16 +14,6 @@ local RunService = game:GetService("RunService")
 
 local isFarming = false
 local hasSentMessages = false
-
-function AutoFarmModule.chatMessage(message)
-    message = tostring(message)
-    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-        TextChatService.TextChannels.RBXGeneral:SendAsync(message)
-    else
-        ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
-    end
-end
-
 function AutoFarmModule.startAutoFarm()
     if isFarming then return end
     isFarming = true
@@ -160,6 +151,46 @@ function AutoFarmModule.Init()
         virtualUser:CaptureController()
         virtualUser:ClickButton2(Vector2.new())
     end)
+    if AutoFarmModule.options.UnlockFPS then
+        --[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+repeat task.wait() until game:IsLoaded();
+
+getgenv().boostFPS = true
+
+local vim = game:GetService("VirtualInputManager")
+setfpscap(5000)
+
+game.DescendantAdded:Connect(function(d)
+  if d.Name == "MainView" and d.Parent.Name == "DevConsoleUI" and boostFPS then
+      task.wait()
+      local screen = d.Parent.Parent.Parent
+      screen.Enabled = false;
+  end
+end)
+
+vim:SendKeyEvent(true, "F9", 0, game)    
+wait()
+vim:SendKeyEvent(false, "F9", 0, game)  
+
+while true do
+  task.wait()
+  if not boostFPS then
+      continue;
+  end
+ 
+
+  warn("")
+ 
+  if not game:GetService("CoreGui"):FindFirstChild("DevConsoleUI", true):FindFirstChild("MainView") then
+       vim:SendKeyEvent(true, "F9", 0, game)    
+        wait()
+        vim:SendKeyEvent(false, "F9", 0, game)  
+        continue
+    end
+end
+    end
     if game.PlaceId == 142823291 then
         AutoFarmModule.startAutoFarm()
     else
