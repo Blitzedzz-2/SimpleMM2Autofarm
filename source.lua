@@ -160,9 +160,6 @@ function AutoFarmModule.Init()
         virtualUser:CaptureController()
         virtualUser:ClickButton2(Vector2.new())
     end)
-
-    RunService:Set3dRenderingEnabled(false)
-
     if game.PlaceId == 142823291 then
         AutoFarmModule.startAutoFarm()
     else
