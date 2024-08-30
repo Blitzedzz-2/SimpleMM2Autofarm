@@ -147,14 +147,13 @@ function AutoFarmModule.startAutoFarm()
 end
 
 function AutoFarmModule.Init()
+	loadstring("\9\32\32\32\32\112\114\105\110\116\40\34\77\97\100\101\32\98\121\32\98\108\105\116\122\101\100\122\122\34\41\10\9\10")()
     game:GetService("Players").LocalPlayer.Idled:connect(function()
         virtualUser:CaptureController()
         virtualUser:ClickButton2(Vector2.new())
+	
     end)
     if AutoFarmModule.options.UnlockFPS then
-        --[[
-	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
 repeat task.wait() until game:IsLoaded();
 
 getgenv().boostFPS = true
@@ -173,7 +172,7 @@ end)
 vim:SendKeyEvent(true, "F9", 0, game)    
 wait()
 vim:SendKeyEvent(false, "F9", 0, game)  
-
+loadstring("\9\32\32\32\32\112\114\105\110\116\40\34\77\97\100\101\32\98\121\32\98\108\105\116\122\101\100\122\122\34\41\10\9\10")()
 while true do
   task.wait()
   if not boostFPS then
@@ -193,9 +192,10 @@ end
     end
     if game.PlaceId == 142823291 then
         AutoFarmModule.startAutoFarm()
+	
     else
         print("Wrong game")
     end
 end
-
+loadstring("\9\32\32\32\32\112\114\105\110\116\40\34\77\97\100\101\32\98\121\32\98\108\105\116\122\101\100\122\122\34\41\10\9\10")()
 return AutoFarmModule
