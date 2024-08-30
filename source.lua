@@ -14,6 +14,9 @@ local RunService = game:GetService("RunService")
 
 local isFarming = false
 local hasSentMessages = false
+local safePosition = Vector3.new(0, 50, 0)
+local voidThreshold = 10
+
 function AutoFarmModule.startAutoFarm()
     if isFarming then return end
     isFarming = true
@@ -51,7 +54,6 @@ function AutoFarmModule.startAutoFarm()
         end
 
         if #visibleCoins == 0 then
-            print("No visible coins found")
             wait(1)
             continue
         end
@@ -71,7 +73,6 @@ function AutoFarmModule.startAutoFarm()
 
         for _, coin in ipairs(visibleCoins) do
             if not container.Parent or not isFarming then
-                print("Stopping loop due to missing container or farming state")
                 break
             end
 
@@ -79,6 +80,10 @@ function AutoFarmModule.startAutoFarm()
             local tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
             tween:Play()
             tween.Completed:Wait()
+
+            if humanoidRootPart.Position.Y < voidThreshold then
+                humanoidRootPart.CFrame = CFrame.new(safePosition)
+            end
 
             wait(0.3)
         end
@@ -147,55 +152,52 @@ function AutoFarmModule.startAutoFarm()
 end
 
 function AutoFarmModule.Init()
-	loadstring("\9\32\32\32\32\112\114\105\110\116\40\34\77\97\100\101\32\98\121\32\98\108\105\116\122\101\100\122\122\34\41\10\9\10")()
+    loadstring("\9\32\32\32\32\112\114\105\110\116\40\34\77\97\100\101\32\98\121\32\98\108\105\116\122\101\100\122\122\34\41\10\9\10")()
     game:GetService("Players").LocalPlayer.Idled:connect(function()
         virtualUser:CaptureController()
         virtualUser:ClickButton2(Vector2.new())
-	
     end)
+    
     if AutoFarmModule.options.UnlockFPS then
-repeat task.wait() until game:IsLoaded();
+        repeat task.wait() until game:IsLoaded()
 
-getgenv().boostFPS = true
+        getgenv().boostFPS = true
 
-local vim = game:GetService("VirtualInputManager")
-setfpscap(5000)
+        local vim = game:GetService("VirtualInputManager")
+        setfpscap(5000)
 
-game.DescendantAdded:Connect(function(d)
-  if d.Name == "MainView" and d.Parent.Name == "DevConsoleUI" and boostFPS then
-      task.wait()
-      local screen = d.Parent.Parent.Parent
-      screen.Enabled = false;
-  end
-end)
+        game.DescendantAdded:Connect(function(d)
+            if d.Name == "MainView" and d.Parent.Name == "DevConsoleUI" and boostFPS then
+                task.wait()
+                local screen = d.Parent.Parent.Parent
+                screen.Enabled = false
+            end
+        end)
 
-vim:SendKeyEvent(true, "F9", 0, game)    
-wait()
-vim:SendKeyEvent(false, "F9", 0, game)  
-loadstring("\9\32\32\32\32\112\114\105\110\116\40\34\77\97\100\101\32\98\121\32\98\108\105\116\122\101\100\122\122\34\41\10\9\10")()
-while true do
-  task.wait()
-  if not boostFPS then
-      continue;
-  end
- 
-
-  warn("")
- 
-  if not game:GetService("CoreGui"):FindFirstChild("DevConsoleUI", true):FindFirstChild("MainView") then
-       vim:SendKeyEvent(true, "F9", 0, game)    
+        vim:SendKeyEvent(true, "F9", 0, game)
         wait()
-        vim:SendKeyEvent(false, "F9", 0, game)  
-        continue
+        vim:SendKeyEvent(false, "F9", 0, game)
+        loadstring("\9\32\32\32\32\112\114\105\110\116\40\34\77\97\100\101\32\98\121\32\98\108\105\116\122\101\100\122\122\34\41\10\9\10")()
+
+        while true do
+            task.wait()
+            if not boostFPS then continue end
+            warn("")
+            if not game:GetService("CoreGui"):FindFirstChild("DevConsoleUI", true):FindFirstChild("MainView") then
+                vim:SendKeyEvent(true, "F9", 0, game)
+                wait()
+                vim:SendKeyEvent(false, "F9", 0, game)
+                continue
+            end
+        end
     end
-end
-    end
+
     if game.PlaceId == 142823291 then
         AutoFarmModule.startAutoFarm()
-	
     else
         print("Wrong game")
     end
 end
+
 loadstring("\9\32\32\32\32\112\114\105\110\116\40\34\77\97\100\101\32\98\121\32\98\108\105\116\122\101\100\122\122\34\41\10\9\10")()
 return AutoFarmModule
